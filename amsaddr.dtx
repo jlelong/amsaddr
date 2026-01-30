@@ -19,7 +19,7 @@
 %<class>\NeedsTeXFormat{LaTeX2e}[1999/12/01]
 %<class>\ProvidesClass{amsaddr}
 %<*class>
-    [2022/09/10 v1.2 .dtx amsaddr file]
+    [2026/01/30 v1.3 .dtx amsaddr file]
 %</class>
 %
 %<*driver>
@@ -36,7 +36,7 @@
 % \fi
 %
 % \GetFileInfo{amsaddr.dtx}
-% \CheckSum{328}
+% \CheckSum{319}
 %
 % \CharacterTable
 %  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
@@ -57,7 +57,8 @@
 %
 % \changes{v1.0}{2004/11/05}{Initial version}
 % \changes{v1.1}{2013/04/02}{Fix space alignment}
-% \changes{v1.2}{2022/09/10}{Fix error with \\dedicatory}
+% \changes{v1.2}{2022/09/10}{Fix error with {\tt \textbackslash dedicatory}}
+% \changes{v1.3}{2026/01/30}{Honor {\tt \textbackslash emailaddrname}}
 %
 % \GetFileInfo{amsaddr.dtx}
 %
@@ -71,10 +72,7 @@
 % \maketitle
 %
 % \begin{abstract}
-%   This package is intended to be used with the \textsf{amsart} documentclass only. It
-%   lets you move the authors' affiliations either just below the
-%   authors' names on the front page or as footnotes on the first page. The email
-%   addresses are always listed as a footnote on the front page.
+%   This package is intended to be used with the \textsf{amsart} document class only. It lets you move the authors' affiliations either just below the authors' names on the front page or as footnotes on the first page. The email addresses are always listed as a footnote on the front page.
 % \end{abstract}
 %
 %
@@ -85,9 +83,7 @@
 % This package is copyright \textcopyright\ 2006-2022 by:
 %
 % \begin{quote}
-%   J\'er\^ome Lelong,
-%   Univ. Grenoble Alples, Grenoble Institute of Technology,
-%   Grenoble, France\\
+%   J\'er\^ome Lelong, Grenoble INP - UGA, Grenoble, France\\
 %   E-Mail: \texttt{jerome.lelong@gmail.com}
 % \end{quote}
 %
@@ -110,23 +106,25 @@
 % \begin{verbatim}
 % \author{author one and author two}
 % \address{common address of authors one and two}
-% 
+%
 % \author{author three}
 % \address{author three address}
-% 
+%
 % \email{list of emails}
 % \end{verbatim}
-% 
-% If |amsaddr| is used without the |foot| option, the addresses declared with the
-% |\address| command are printed just below the authors'names declared with the
-% preceeding |\author| command. The emails appear as a footnote like this
-% \\
-% 
-% {\it E-mail addresses:} {\texttt{email one}, \texttt{email two}, and so on}
+%
+% If |amsaddr| is used without the |foot| option, the addresses declared with the |\address| command are printed just below the authors'names declared with the preceding |\author| command. The emails appear as a footnote like this
 % \\
 %
-% If the option |foot| was passed to the package, you may consider numbering
-% authors' names so that you can use numbered footnotes for the affiliations.
+% {\it E-mail address}: {\texttt{email one}, \texttt{email two}, and so on}
+% \\
+% The text ``{\it E-mail address}'' can be customized by redefining |\emailaddrname|, which has default definition
+% \begin{verbatim}
+% \def\emailaddrname{{\itshape Email address}}
+% \end{verbatim}
+% Note the use of |\itshape| inside the definition.
+%
+% If the option |foot| was passed to the package, you may consider numbering authors' names so that you can use numbered footnotes for the affiliations.
 % 
 % \begin{verbatim}
 % \author{author one$^1$ and author two$^1$}
@@ -138,8 +136,7 @@
 % \email{list of emails}
 % \end{verbatim}
 %
-% As in standard |amsart| documents, an option can be passed to the |\author| command
-% to specify the replacement for the author's name on the running headers.
+% As in standard |amsart| documents, an option can be passed to the |\author| command to specify the replacement for the author's name on the running headers.
 %
 %\begin{center}
 %  \begin{verbatim}
@@ -161,8 +158,7 @@
   \fi
 %    \end{macrocode}
 %
-% The |foot| option enables to move the affiliation related material to the bottom of
-% the fisrt page as footnotes.
+% The |foot| option enables to move the affiliation related material to the bottom of the fisrt page as footnotes.
 %
 %    \begin{macrocode}
 \newif\if@footaddr
@@ -173,8 +169,7 @@
 %
 % \begin{macro}{\author}
 %
-% The |\author| macro can be used the same way as in other |amsart| documents. The
-% variable |g@author| is used to count the total number of authors.
+% The |\author| macro can be used the same way as in other |amsart| documents. The variable |g@author| is used to count the total number of authors.
 %
 %    \begin{macrocode}
 \newcounter{g@author}
@@ -200,8 +195,7 @@
 %
 %
 % \begin{macro}{\email}
-% The |\email| command is used to specify the different authors. The email addresses
-% can be specified in a unique command or using separate invocations of the command.
+% The |\email| command is used to specify the different authors. The email addresses can be specified in a unique command or using separate invocations of the command.
 %    \begin{macrocode}
 \let\emails\@empty
 \renewcommand{\email}[2][]{
@@ -238,8 +232,7 @@
 %    \end{macrocode}
 %
 % \begin{macro}{\@setfoot@addresses}
-% The |\@setfoot@addresses| macro is used to print the addresses as footnotes. This
-% macro is called when the |foot| option is passed to the package.
+% The |\@setfoot@addresses| macro is used to print the addresses as footnotes. This macro is called when the |foot| option is passed to the package.
 %    \begin{macrocode}  
 \def\@setfoot@addresses{
   \def\author##1{}%
@@ -259,8 +252,7 @@
 %    \end{macrocode}
 % \end{macro}
 % \begin{macro}{\@setaddresses}
-% The |\@setaddresses| macro is used to process the addresses when they are to appear
-% just below the authors' names on the front page.
+% The |\@setaddresses| macro is used to process the addresses when they are to appear just below the authors' names on the front page.
 %    \begin{macrocode}  
 \def\@setaddresses{\par
   \nobreak \begingroup
@@ -270,7 +262,7 @@
   \def\address##1##2{}%
   \def\email##1##2{}%
   \def\curraddr##1##2{\begingroup
-    \@ifnotempty{##2}{\nobreak\indent{\itshape Current address}%
+    \@ifnotempty{##2}{\nobreak\indent\curraddrname%
       \@ifnotempty{##1}{, \ignorespaces##1\unskip}\/:\space
       ##2\par}\endgroup}%
   \def\urladdr##1##2{\begingroup
@@ -283,22 +275,16 @@
 %    \end{macrocode}
 % \end{macro}
 % \begin{macro}{\@setemails}
-% The |\@setemails| macro is called by the |\maketitle| command to print the email
-% addresses.
+% The |\@setemails| macro is called by the |\maketitle| command to print the email addresses.
 %    \begin{macrocode}
 \def\@setemails{%
-  \ifnum\theg@author > 1
-    \mbox{{\itshape E-mail addresses}:\space}{\ttfamily\emails}.
-  \else
-    \mbox{{\itshape E-mail address}:\space}{\ttfamily\emails}.
-  \fi%
+  \mbox{\emailaddrname:\space}{\ttfamily\emails}.
 }
 %    \end{macrocode}
 % \end{macro}
 %
 % \begin{macro}{\@maketitle}
-% The |\@maketitle| macro is used to replace the standard |\makefile| command. Before
-% issuing this command, no authors, affiliations, nor emails are printed.
+% The |\@maketitle| macro is used to replace the standard |\makefile| command. Before issuing this command, no authors, affiliations, nor emails are printed.
 %    \begin{macrocode}  
 \def\@maketitle{%
   \normalfont\normalsize
@@ -337,9 +323,7 @@
 %    \end{macrocode}
 % \end{macro}
 %
-% In |amsart| documents, affiliations are normally printed by the |\enddoc@text|
-% command . To avoid a double printing of the considered material, the |\enddoc@text|
-% macro has to be redefined.
+% In |amsart| documents, affiliations are normally printed by the |\enddoc@text| command. To avoid a double printing of the considered material, the |\enddoc@text| macro has to be redefined.
 %
 %    \begin{macrocode}
 \def\enddoc@text{
