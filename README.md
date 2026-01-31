@@ -8,6 +8,6 @@ page.
 
 To produce the `amsaddr.sty` file simply run `latex amsaddr.ins`.
 
-This package is distributed under the [LaTeX Project Public License](http://www.ctan.org/tex-archive/help/Catalogue/licenses.lppl.html).
+This package is distributed under the [LaTeX Project Public License](https://ctan.org/license/lppl1.3c).
 
-
+Jérôme Lelong <jerome.lelong@gmail.com>
